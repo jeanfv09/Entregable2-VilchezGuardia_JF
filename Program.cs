@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Entregable2_VilchezGuardia_JF.Data;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
+using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,7 +19,28 @@ builder.Services.AddSession();
 builder.Services.AddStackExchangeRedisCache(options =>
     options.Configuration = builder.Configuration["Redis:ConnectionString"]);
 
+// Identity
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddDefaultTokenProviders();
+
 var app = builder.Build();
+
+// Crear rol Broker si no existe
+using (var scope = app.Services.CreateScope())
+{
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+
+    // Crear rol Broker
+    if (!await roleManager.RoleExistsAsync("Broker"))
+        await roleManager.CreateAsync(new IdentityRole("Broker"));
+
+    // Opcional: asignar usuario admin al rol Broker
+    var adminUser = await userManager.FindByEmailAsync("admin@broker.com");
+    if (adminUser != null && !await userManager.IsInRoleAsync(adminUser, "Broker"))
+        await userManager.AddToRoleAsync(adminUser, "Broker");
+}
 
 // Middleware
 if (!app.Environment.IsDevelopment())
@@ -42,4 +64,3 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
-

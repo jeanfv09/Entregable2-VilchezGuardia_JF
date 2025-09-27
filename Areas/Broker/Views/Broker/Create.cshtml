@@ -1,0 +1,51 @@
+@model Entregable2_VilchezGuardia_JF.Models.Inmueble
+@{
+    ViewData["Title"] = "Crear/Editar Inmueble";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form asp-action="@ViewData["Title"]" method="post">
+    <div class="form-group">
+        <label asp-for="Codigo"></label>
+        <input asp-for="Codigo" class="form-control"/>
+    </div>
+    <div class="form-group">
+        <label asp-for="Titulo"></label>
+        <input asp-for="Titulo" class="form-control"/>
+    </div>
+    <div class="form-group">
+        <label asp-for="Tipo"></label>
+        <input asp-for="Tipo" class="form-control"/>
+    </div>
+    <div class="form-group">
+        <label asp-for="Ciudad"></label>
+        <input asp-for="Ciudad" class="form-control"/>
+    </div>
+    <div class="form-group">
+        <label asp-for="Direccion"></label>
+        <input asp-for="Direccion" class="form-control"/>
+    </div>
+    <div class="form-group">
+        <label asp-for="Dormitorios"></label>
+        <input asp-for="Dormitorios" class="form-control"/>
+    </div>
+    <div class="form-group">
+        <label asp-for="Banos"></label>
+        <input asp-for="Banos" class="form-control"/>
+    </div>
+    <div class="form-group">
+        <label asp-for="MetrosCuadrados"></label>
+        <input asp-for="MetrosCuadrados" class="form-control"/>
+    </div>
+    <div class="form-group">
+        <label asp-for="Precio"></label>
+        <input asp-for="Precio" class="form-control"/>
+    </div>
+    <div class="form-group">
+        <label asp-for="Activo"></label>
+        <input asp-for="Activo" type="checkbox" />
+    </div>
+    <button type="submit" class="btn btn-success">Guardar</button>
+</form>
+

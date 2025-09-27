@@ -1,0 +1,32 @@
+@model IEnumerable<Entregable2_VilchezGuardia_JF.Models.Reserva>
+@{
+    ViewData["Title"] = "Reservas Activas";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>InmuebleId</th>
+            <th>Usuario</th>
+            <th>Creación</th>
+            <th>Expiración</th>
+            <th>Acción</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach(var r in Model)
+    {
+        <tr>
+            <td>@r.InmuebleId</td>
+            <td>@r.UsuarioId</td>
+            <td>@r.FechaCreacion</td>
+            <td>@r.FechaExpiracion</td>
+            <td>
+                <a asp-action="LiberarReserva" asp-route-id="@r.Id" class="btn btn-warning btn-sm">Liberar</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
