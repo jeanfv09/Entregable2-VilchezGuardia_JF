@@ -1,0 +1,113 @@
+@model IEnumerable<Entregable2_VilchezGuardia_JF.Models.Inmueble>
+@{
+    ViewData["Title"] = "Catálogo";
+
+    int total = ViewData["Total"] != null ? (int)ViewData["Total"] : 0;
+    int currentPage = ViewData["Page"] != null ? (int)ViewData["Page"] : 1;
+    int pageSize = ViewData["PageSize"] != null ? (int)ViewData["PageSize"] : 5;
+    int totalPages = (pageSize > 0) ? (int)Math.Ceiling((double)total / pageSize) : 1;
+
+    // Obtener valores de query de forma segura
+    var q = ViewContext.HttpContext.Request.Query;
+    string ciudadVal = q.ContainsKey("ciudad") ? q["ciudad"].ToString() : "";
+    string tipoVal = q.ContainsKey("tipo") ? q["tipo"].ToString() : "";
+    string precioMinVal = q.ContainsKey("precioMin") ? q["precioMin"].ToString() : "";
+    string precioMaxVal = q.ContainsKey("precioMax") ? q["precioMax"].ToString() : "";
+    string dormitoriosVal = q.ContainsKey("dormitorios") ? q["dormitorios"].ToString() : "";
+}
+
+<h1>Catálogo de Inmuebles</h1>
+
+<form method="get" asp-action="Catalogo">
+    <div>
+        <label>Ciudad:</label>
+        <input type="text" name="ciudad" value="@ciudadVal" />
+    </div>
+    <div>
+        <label>Tipo:</label>
+        <select name="tipo">
+            <option value="">-- Seleccionar --</option>
+            @* Generamos las opciones con if/else para evitar problemas con TagHelpers *@
+            @if (tipoVal == "Departamento") { <option value="Departamento" selected>Departamento</option> } else { <option value="Departamento">Departamento</option> }
+            @if (tipoVal == "Casa") { <option value="Casa" selected>Casa</option> } else { <option value="Casa">Casa</option> }
+            @if (tipoVal == "Oficina") { <option value="Oficina" selected>Oficina</option> } else { <option value="Oficina">Oficina</option> }
+            @if (tipoVal == "Local") { <option value="Local" selected>Local</option> } else { <option value="Local">Local</option> }
+        </select>
+    </div>
+    <div>
+        <label>Precio Mínimo:</label>
+        <input type="number" name="precioMin" value="@precioMinVal" min="0" />
+    </div>
+    <div>
+        <label>Precio Máximo:</label>
+        <input type="number" name="precioMax" value="@precioMaxVal" min="0" />
+    </div>
+    <div>
+        <label>Dormitorios:</label>
+        <input type="number" name="dormitorios" value="@dormitoriosVal" min="0" />
+    </div>
+    <button type="submit">Filtrar</button>
+</form>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div style="color:red">
+        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+        {
+            <p>@error.ErrorMessage</p>
+        }
+    </div>
+}
+
+<table border="1" cellpadding="6" cellspacing="0">
+    <thead>
+        <tr>
+            <th>Código</th>
+            <th>Título</th>
+            <th>Ciudad</th>
+            <th>Precio</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Codigo</td>
+            <td>@item.Titulo</td>
+            <td>@item.Ciudad</td>
+            <td>@item.Precio</td>
+            <td>
+                <a asp-action="Detalle" asp-route-id="@item.Id">Ver Detalle</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<div>
+    Página @currentPage de @totalPages
+    <br />
+    @* Paginación: mantenemos los filtros en las rutas para no perderlos al cambiar de página *@
+    @if (currentPage > 1)
+    {
+        <a asp-action="Catalogo"
+           asp-route-page="@(currentPage - 1)"
+           asp-route-ciudad="@ciudadVal"
+           asp-route-tipo="@tipoVal"
+           asp-route-precioMin="@precioMinVal"
+           asp-route-precioMax="@precioMaxVal"
+           asp-route-dormitorios="@dormitoriosVal">Anterior</a>
+    }
+    @if (currentPage < totalPages)
+    {
+        <a asp-action="Catalogo"
+           asp-route-page="@(currentPage + 1)"
+           asp-route-ciudad="@ciudadVal"
+           asp-route-tipo="@tipoVal"
+           asp-route-precioMin="@precioMinVal"
+           asp-route-precioMax="@precioMaxVal"
+           asp-route-dormitorios="@dormitoriosVal">Siguiente</a>
+    }
+</div>
+
