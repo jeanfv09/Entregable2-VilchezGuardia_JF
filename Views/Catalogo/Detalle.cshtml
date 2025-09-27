@@ -1,0 +1,21 @@
+@model Entregable2_VilchezGuardia_JF.Models.Inmueble
+@{
+    ViewData["Title"] = "Detalle de Inmueble";
+}
+
+<h1>@Model.Titulo</h1>
+<p><b>Código:</b> @Model.Codigo</p>
+<p><b>Ciudad:</b> @Model.Ciudad</p>
+<p><b>Dirección:</b> @Model.Direccion</p>
+<p><b>Dormitorios:</b> @Model.Dormitorios</p>
+<p><b>Baños:</b> @Model.Banos</p>
+<p><b>Metros:</b> @Model.MetrosCuadrados</p>
+<p><b>Precio:</b> S/. @Model.Precio</p>
+
+@if (!string.IsNullOrEmpty(Model.Imagen))
+{
+    <img src="/images/@Model.Imagen" alt="@Model.Titulo" width="300" />
+}
+
+<hr />
+<a asp-action="Index">Volver al Catálogo</a>

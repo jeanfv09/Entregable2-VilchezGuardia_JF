@@ -1,29 +1,45 @@
+using Microsoft.EntityFrameworkCore;
+using Entregable2_VilchezGuardia_JF.Data;
+using Microsoft.Extensions.Caching.StackExchangeRedis;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+// Configurar SQLite
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Sesiones (para Pregunta 4)
+builder.Services.AddSession();
+
+// Redis Cache
+builder.Services.AddStackExchangeRedisCache(options =>
+    options.Configuration = builder.Configuration["Redis:ConnectionString"]);
+
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Middleware
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
+
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapStaticAssets();
+app.UseSession(); // activar sesiones
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}")
-    .WithStaticAssets();
-
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
