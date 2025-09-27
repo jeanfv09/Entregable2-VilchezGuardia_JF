@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Entregable2_VilchezGuardia_JF.Data;
+using Microsoft.Extensions.Caching.StackExchangeRedis;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 // Sesiones (para Pregunta 4)
 builder.Services.AddSession();
+
+// Redis Cache
+builder.Services.AddStackExchangeRedisCache(options =>
+    options.Configuration = builder.Configuration["Redis:ConnectionString"]);
 
 var app = builder.Build();
 
@@ -37,3 +42,4 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+

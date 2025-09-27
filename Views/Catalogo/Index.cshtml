@@ -1,0 +1,95 @@
+@model IEnumerable<Entregable2_VilchezGuardia_JF.Models.Inmueble>
+@{
+    ViewData["Title"] = "Catálogo";
+
+    // Leer últimos filtros de sesión
+    var ultimaCiudad = Context.Session.GetString("UltimaCiudad") ?? "";
+    var ultimoTipo = Context.Session.GetString("UltimoTipo") ?? "";
+    var ultimoPrecioMin = Context.Session.GetString("UltimoPrecioMin") ?? "";
+    var ultimoPrecioMax = Context.Session.GetString("UltimoPrecioMax") ?? "";
+    var ultimosDormitorios = Context.Session.GetString("UltimosDormitorios") ?? "";
+}
+
+<h1>Catálogo de Inmuebles</h1>
+
+<form method="get" asp-action="Index">
+    <div>
+        <label>Ciudad:</label>
+        <input type="text" name="ciudad" value="@ultimaCiudad" />
+    </div>
+    <div>
+        <label>Tipo:</label>
+        <select name="tipo">
+            <option value="">-- Seleccionar --</option>
+            @{
+                string[] tipos = { "Departamento", "Casa", "Oficina", "Local" };
+                foreach (var tipo in tipos)
+                {
+                    var selected = tipo == ultimoTipo ? "selected=\"selected\"" : "";
+                    @:<option value="@tipo" @Html.Raw(selected)>@tipo</option>
+                }
+            }
+        </select>
+
+    </div>
+    <div>
+        <label>Precio Mínimo:</label>
+        <input type="number" name="precioMin" value="@ultimoPrecioMin" />
+    </div>
+    <div>
+        <label>Precio Máximo:</label>
+        <input type="number" name="precioMax" value="@ultimoPrecioMax" />
+    </div>
+    <div>
+        <label>Dormitorios:</label>
+        <input type="number" name="dormitorios" value="@ultimosDormitorios" />
+    </div>
+    <button type="submit">Filtrar</button>
+</form>
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div style="color:red">
+        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+        {
+            <p>@error.ErrorMessage</p>
+        }
+    </div>
+}
+
+<table border="1">
+    <tr>
+        <th>Código</th>
+        <th>Título</th>
+        <th>Ciudad</th>
+        <th>Precio</th>
+        <th></th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Codigo</td>
+            <td>@item.Titulo</td>
+            <td>@item.Ciudad</td>
+            <td>@item.Precio</td>
+            <td>
+                <a asp-action="Detalle" asp-route-id="@item.Id">Ver Detalle</a>
+            </td>
+        </tr>
+    }
+</table>
+
+<div>
+    Página @ViewData["Page"] de @(Math.Ceiling(Convert.ToDouble(ViewData["Total"]) / Convert.ToDouble(ViewData["PageSize"])))
+    <br />
+    @if ((int)ViewData["Page"] > 1)
+    {
+        <a asp-action="Index" asp-route-page="@( (int)ViewData["Page"] - 1 )">Anterior</a>
+    }
+    @if ((int)ViewData["Page"] * (int)ViewData["PageSize"] < (int)ViewData["Total"])
+    {
+        <a asp-action="Index" asp-route-page="@( (int)ViewData["Page"] + 1 )">Siguiente</a>
+    }
+</div>
+
+
