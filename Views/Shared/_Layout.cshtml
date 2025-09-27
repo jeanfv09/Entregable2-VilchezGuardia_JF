@@ -34,6 +34,22 @@
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
+
+            @* Bloque de sesión: Volver a último inmueble visitado *@
+            @inject IHttpContextAccessor HttpContextAccessor
+            @{
+                var ultimoId = HttpContextAccessor.HttpContext.Session.GetInt32("UltimoInmuebleId");
+                var ultimoTitulo = HttpContextAccessor.HttpContext.Session.GetString("UltimoTitulo");
+            }
+
+            @if (ultimoId.HasValue && !string.IsNullOrEmpty(ultimoTitulo))
+            {
+                <div class="mb-3">
+                    <a class="btn btn-sm btn-info" href="@Url.Action("Detalle", "Catalogo", new { id = ultimoId })">
+                        Volver a @ultimoTitulo
+                    </a>
+                </div>
+            }
         </main>
     </div>
 
@@ -48,3 +64,4 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+
