@@ -1,7 +1,7 @@
 services:
   - type: web
     name: entregable2-bienes-raices
-    runtime: dotnet
+    env: docker
     plan: free
     repo: https://github.com/jeanfv09/Entregable2_VilchezGuardia_JF
     branch: deploy/render
@@ -12,3 +12,4 @@ services:
         value: Production
       - key: ASPNETCORE_URLS
         value: http://0.0.0.0:${PORT}
+
