@@ -26,6 +26,15 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
 
 var app = builder.Build();
 
+// =========================
+// APLICAR MIGRACIONES AUTOMÁTICAS (SQLite)
+// =========================
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.Migrate();
+}
+
 // Crear rol Broker si no existe
 using (var scope = app.Services.CreateScope())
 {
@@ -64,3 +73,4 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
