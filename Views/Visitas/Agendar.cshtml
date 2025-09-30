@@ -1,0 +1,30 @@
+@model Entregable2_VilchezGuardia_JF.Models.Visita
+@{
+    ViewData["Title"] = "Agendar Visita";
+}
+
+<h1>Agendar Visita</h1>
+
+<form asp-action="Agendar" method="post">
+    <input type="hidden" asp-for="InmuebleId" />
+
+    <div>
+        <label>Fecha Inicio</label>
+        <input asp-for="FechaInicio" type="datetime-local" />
+        <span asp-validation-for="FechaInicio" style="color:red"></span>
+    </div>
+    <div>
+        <label>Fecha Fin</label>
+        <input asp-for="FechaFin" type="datetime-local" />
+        <span asp-validation-for="FechaFin" style="color:red"></span>
+    </div>
+    <div>
+        <label>Notas</label>
+        <textarea asp-for="Notas"></textarea>
+    </div>
+    <button type="submit">Guardar</button>
+</form>
+
+<div>
+    <a asp-controller="Inmuebles" asp-action="Detalle" asp-route-id="@Model.InmuebleId">Volver al Detalle</a>
+</div>

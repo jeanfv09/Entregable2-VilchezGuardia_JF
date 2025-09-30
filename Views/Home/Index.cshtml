@@ -2,7 +2,63 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container text-center mt-5">
+    <h1 class="display-4">Panel de Prueba — Entregable2</h1>
+    <p class="lead">Accede rápidamente a todas las funcionalidades implementadas</p>
+
+    <div class="row mt-4">
+        <!-- Pregunta 1: Catálogo -->
+        <div class="col-md-4 mb-3">
+            <a href="@Url.Action("Index", "Catalogo")" class="btn btn-primary btn-lg w-100">
+                Catálogo de Inmuebles
+            </a>
+        </div>
+
+        <!-- Pregunta 2: Buscar Inmueble -->
+        <div class="col-md-4 mb-3">
+            <a href="@Url.Action("Buscar", "Catalogo")" class="btn btn-success btn-lg w-100">
+                Buscar Inmueble
+            </a>
+        </div>
+
+        <!-- Pregunta 3: Últimos filtros (sesión) -->
+        <div class="col-md-4 mb-3">
+            <a href="@Url.Action("Index", "Catalogo")" class="btn btn-warning btn-lg w-100">
+                Últimos Filtros Guardados
+            </a>
+        </div>
+
+        <!-- Pregunta 4: Sesión + Redis -->
+        <div class="col-md-4 mb-3">
+            <a href="@Url.Action("Index", "Catalogo")" class="btn btn-info btn-lg w-100">
+                Prueba de Caché y Sesión (Redis)
+            </a>
+        </div>
+
+        <!-- Pregunta 5: Panel Broker -->
+        <div class="col-md-4 mb-3">
+            <a href="@Url.Action("Index", "Inmuebles", new { area = "Broker" })" class="btn btn-dark btn-lg w-100">
+                Panel Broker (CRUD Inmuebles)
+            </a>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <a href="@Url.Action("VisitasHoy", "Agenda", new { area = "Broker" })" class="btn btn-secondary btn-lg w-100">
+                Agenda de Visitas
+            </a>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <a href="@Url.Action("ReservasActivas", "Agenda", new { area = "Broker" })" class="btn btn-danger btn-lg w-100">
+                Reservas Activas
+            </a>
+        </div>
+
+        <!-- Pregunta 6: Deploy Render -->
+        <div class="col-md-12 mt-4">
+            <a href="https://entregable2-vilchezguardia-jf-8.onrender.com" class="btn btn-outline-primary btn-lg w-50" target="_blank">
+                Ir a la App en Render
+            </a>
+        </div>
+    </div>
 </div>

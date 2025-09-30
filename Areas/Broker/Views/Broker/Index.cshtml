@@ -1,0 +1,37 @@
+@model IEnumerable<Entregable2_VilchezGuardia_JF.Models.Inmueble>
+@{
+    ViewData["Title"] = "Inmuebles Broker";
+}
+
+<h1>Inmuebles Broker</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Crear Nuevo Inmueble</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Código</th>
+            <th>Título</th>
+            <th>Ciudad</th>
+            <th>Activo</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var item in Model)
+        {
+            <tr>
+                <td>@item.Codigo</td>
+                <td>@item.Titulo</td>
+                <td>@item.Ciudad</td>
+                <td>@item.Activo</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> |
+                    <a asp-action="ToggleActivo" asp-route-id="@item.Id">Activar/Desactivar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
