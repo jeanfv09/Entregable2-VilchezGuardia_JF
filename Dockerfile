@@ -1,25 +1,28 @@
-# Etapa de build
+# ========================
+# Etapa 1: Build
+# ========================
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build-env
 WORKDIR /app
 
-# Copiar csproj y restaurar dependencias
+# Copiar archivo de proyecto y restaurar dependencias
 COPY *.csproj ./
 RUN dotnet restore
 
-# Copiar todo y compilar
+# Copiar todo el código y compilar en Release
 COPY . ./
 RUN dotnet publish -c Release -o out
 
-# Etapa de runtime
+# ========================
+# Etapa 2: Runtime
+# ========================
 FROM mcr.microsoft.com/dotnet/aspnet:9.0
 WORKDIR /app
+
+# Copiar la salida del build
 COPY --from=build-env /app/out .
 
-# Nombre del DLL generado (asegúrate de que coincida con tu proyecto)
-ENV DOTNET_RUNNING_APP Entregable2_VilchezGuardia_JF.dll
+# Render usa $PORT automáticamente → configurar ASP.NET Core
+ENV ASPNETCORE_URLS=http://+:${PORT}
 
-# Exponer el puerto que Render usa
-ENV ASPNETCORE_URLS=http://+:$PORT
-
-# Ejecutar la app
-CMD ["sh", "-c", "dotnet $DOTNET_RUNNING_APP"]
+# Nombre de tu DLL (verificado con `dotnet publish -c Release -o out`)
+CMD ["dotnet", "Entregable2-VilchezGuardia_JF.dll"]
